@@ -1,0 +1,142 @@
+//Q.1. Write a Java program to implement an ArrayList that stores employee
+details (ID, Name, and Salary). Allow users to add, update, remove, and
+search employees.
+
+import java.util.*;
+
+class Employee {
+    private int id;
+    private String name;
+    private double salary;
+
+    public Employee(int id, String name, double salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Salary: " + salary;
+    }
+}
+
+public class EmployeeManager {
+    private static final List<Employee> employees = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\n1. Add Employee");
+            System.out.println("2. Update Employee");
+            System.out.println("3. Remove Employee");
+            System.out.println("4. Search Employee");
+            System.out.println("5. Display All Employees");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1 -> addEmployee();
+                case 2 -> updateEmployee();
+                case 3 -> removeEmployee();
+                case 4 -> searchEmployee();
+                case 5 -> displayEmployees();
+                case 6 -> exitProgram();
+                default -> System.out.println("Invalid Choice! Try Again.");
+            }
+        }
+    }
+
+    private static void addEmployee() {
+        System.out.print("Enter Employee ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter Salary: ");
+        double salary = scanner.nextDouble();
+
+        employees.add(new Employee(id, name, salary));
+        System.out.println("Employee Added Successfully!");
+    }
+
+    private static void updateEmployee() {
+        System.out.print("Enter Employee ID to Update: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        for (Employee emp : employees) {
+            if (emp.getId() == id) {
+                System.out.print("Enter New Name: ");
+                emp.setName(scanner.nextLine());
+                System.out.print("Enter New Salary: ");
+                emp.setSalary(scanner.nextDouble());
+                System.out.println("Employee Updated Successfully!");
+                return;
+            }
+        }
+        System.out.println("Employee Not Found!");
+    }
+
+    private static void removeEmployee() {
+        System.out.print("Enter Employee ID to Remove: ");
+        int id = scanner.nextInt();
+
+        boolean removed = employees.removeIf(emp -> emp.getId() == id);
+        if (removed) {
+            System.out.println("Employee Removed Successfully!");
+        } else {
+            System.out.println("Employee Not Found!");
+        }
+    }
+
+    private static void searchEmployee() {
+        System.out.print("Enter Employee ID to Search: ");
+        int id = scanner.nextInt();
+
+        for (Employee emp : employees) {
+            if (emp.getId() == id) {
+                System.out.println(emp);
+                return;
+            }
+        }
+        System.out.println("Employee Not Found!");
+    }
+
+    private static void displayEmployees() {
+        if (employees.isEmpty()) {
+            System.out.println("No Employees Found!");
+        } else {
+            employees.forEach(System.out::println);
+        }
+    }
+
+    private static void exitProgram() {
+        System.out.println("Exiting...");
+        scanner.close();
+        System.exit(0);
+    }
+}
