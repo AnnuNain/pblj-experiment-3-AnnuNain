@@ -1,0 +1,87 @@
+// Create a program to collect and store all the cards to assist the users in
+finding all the cards in a given symbol using the Collection interface.
+
+import java.util.*;
+
+class PlayingCard {
+    private String suit;
+    private String rank;
+
+    public PlayingCard(String suit, String rank) {
+        this.suit = suit;
+        this.rank = rank;
+    }
+
+    @Override
+    public String toString() {
+        return rank + " of " + suit;
+    }
+}
+
+public class CardDeck {
+    private static final Map<String, List<PlayingCard>> cardDeck = new HashMap<>();
+    private static final Scanner inputScanner = new Scanner(System.in);
+
+    public static void addPlayingCard() {
+        System.out.print("Enter Card Suit (e.g., Hearts, Spades): ");
+        String suit = inputScanner.nextLine();
+        System.out.print("Enter Card Rank (e.g., Ace, King, 10): ");
+        String rank = inputScanner.nextLine();
+        
+        cardDeck.putIfAbsent(suit, new ArrayList<>());
+        cardDeck.get(suit).add(new PlayingCard(suit, rank));
+        System.out.println("Card Successfully Added!");
+    }
+
+    public static void searchCardsBySuit() {
+        System.out.print("Enter Suit to Search: ");
+        String suit = inputScanner.nextLine();
+        List<PlayingCard> cards = cardDeck.get(suit);
+        
+        if (cards != null && !cards.isEmpty()) {
+            System.out.println("Cards in " + suit + ":");
+            for (PlayingCard card : cards) {
+                System.out.println(card);
+            }
+        } else {
+            System.out.println("No cards found for this suit!");
+        }
+    }
+
+    public static void showAllCards() {
+        if (cardDeck.isEmpty()) {
+            System.out.println("No Cards Available!");
+            return;
+        }
+        for (Map.Entry<String, List<PlayingCard>> entry : cardDeck.entrySet()) {
+            System.out.println("\nSuit: " + entry.getKey());
+            for (PlayingCard card : entry.getValue()) {
+                System.out.println(card);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\n1. Add Playing Card");
+            System.out.println("2. Search Cards by Suit");
+            System.out.println("3. Show All Cards");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            
+            int choice = inputScanner.nextInt();
+            inputScanner.nextLine();
+            
+            switch (choice) {
+                case 1 -> addPlayingCard();
+                case 2 -> searchCardsBySuit();
+                case 3 -> showAllCards();
+                case 4 -> {
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                }
+                default -> System.out.println("Invalid Choice! Try Again.");
+            }
+        }
+    }
+}
